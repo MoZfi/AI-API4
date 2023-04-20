@@ -466,15 +466,16 @@ def cut():
 
         # plot the image
         # create GUI for the output image using Matplotlib
-        image_final= (data * std_torch + mean_torch)[:1]# in 4 dim dare :tensor of size [1, 3, 224, 224]
+        image_final= (data * std_torch + mean_torch)[:sample_num]# in 4 dim dare :tensor of size [1, 3, 224, 224]
         #image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
         fig, axes = plt.subplots(1,len(image_final),figsize=(3*len(image_final),3))
 
         # axes is a single Axes object
-        if len(input_me.shape) == 4:
-            axes.imshow(input_me[0].permute(1,2,0).numpy())
-        else :
-            axes.imshow(input_me[0].numpy(), cmap='gray', vmin=0., vmax=1.)
+        for i, ax in enumerate(axes):
+            if len(image_final.shape) == 4:
+                ax.imshow(image_final[i].permute(1,2,0).numpy())
+            else :
+                ax.imshow(image_final[i].numpy(), cmap='gray', vmin=0., vmax=1.)
         
         plt.subplots_adjust(wspace = 0.1)
 
