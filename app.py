@@ -509,7 +509,7 @@ def cut():
         # plot the image
         # create GUI for the output image using Matplotlib
         image_final= (data * std_torch + mean_torch)[:1]# in 4 dim dare :tensor of size [1, 3, 224, 224]
-        image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
+        #image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
         fig, axes = plt.subplots(1,len(image_final),figsize=(3*len(image_final),3))
 
         for i, ax in enumerate(axes):
