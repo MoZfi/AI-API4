@@ -37,40 +37,13 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 app = Flask(__name__)
 api = Api(app) 
 
-
-# define the print function
-def print_fig(input, target=None, title=None, save_dir=None):
-        fig, axes = plt.subplots(1,len(input),figsize=(3*len(input),3))
-        if title:
-            fig.suptitle(title, size=16)
-        if len(input) == 1 :
-            axes = [axes]
-
-        for i, ax in enumerate(axes):
-            if len(input.shape) == 4:
-                ax.imshow(input[i].permute(1,2,0).numpy())
-            else :
-                ax.imshow(input[i].numpy(), cmap='gray', vmin=0., vmax=1.)
-
-            if target is not None:
-                output = net((input[i].unsqueeze(0) - mean)/std)
-                loss = criterion(output, target[i:i+1])
-                ax.set_title("loss: {:.3f}\n pred: {}\n true : {}".format(loss, CIFAR100_LABELS_LIST[output.max(1)[1][0]], CIFAR100_LABELS_LIST[target[i]]))
-            ax.axis('off')
-        plt.subplots_adjust(wspace = 0.1)
-
-        if save_dir is not None:
-            plt.savefig(save_dir, bbox_inches = 'tight',  pad_inches = 0)
-
-        plt.show()
-        
-        
+       
 @app.route('/')
 def hello_world():
     return "Hello World!"
 
 # Puzzlemix
-@app.route('/Puzzlemix', methods=['GET', 'POST'], endpoint='puzzle')
+@app.route('/Puzzlemix', methods=['POST'], endpoint='puzzle')
 def puzzle():
     if request.method == 'POST':
         files = request.files
@@ -334,7 +307,7 @@ def puzzle():
         #'''
 
 ###############Cutmix
-@app.route('/Cutmix', methods=['GET', 'POST'],  endpoint='cut')
+@app.route('/Cutmix', methods=['POST'],  endpoint='cut')
 def cut():
     if request.method == 'POST':
         files = request.files
@@ -438,21 +411,6 @@ def cut():
 
         #print_fig((input_sp * std_torch + mean_torch)[:sample_num])
 
-
-        ########### Saliency ###############
-        input_var = input_sp[:sample_num].clone().detach().requires_grad_(True)
-        output = resnet(input_var)
-        loss = criterion(output, targets[:sample_num])
-        loss.backward()
-
-        unary = torch.sqrt(torch.mean(input_var.grad **2, dim=1))
-        unary = unary / unary.view(sample_num, -1).max(1)[0].view(sample_num, 1, 1)
-        #print_fig(unary)
-
-        unary16 = F.avg_pool2d(unary, 224//16)
-        unary16 = unary16 / unary16.view(sample_num, -1).max(1)[0].view(sample_num, 1, 1)
-        #print_fig(unary16)
-
         """### Cut Mix"""
 
         alpha=0.5
@@ -487,7 +445,7 @@ def cut():
         shuffled_targets1= lam * targets[0] + targets[1]* (1 - lam)
         targets1 = (targets,shuffled_targets,shuffled_targets1, lam)
 
-        print_fig((data * std_torch + mean_torch)[:sample_num])
+        #print_fig((data * std_torch + mean_torch)[:sample_num])
         print(targets1)
         print(data[0].shape)
         
@@ -512,11 +470,11 @@ def cut():
         #image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
         fig, axes = plt.subplots(1,len(image_final),figsize=(3*len(image_final),3))
 
-        for i, ax in enumerate(axes.flat):
-            if len(image_final.shape) == 4:
-                ax.imshow(image_final[i].permute(1,2,0).numpy())
-            else :
-                ax.imshow(image_final[i].numpy(), cmap='gray', vmin=0., vmax=1.)
+        # axes is a single Axes object
+        if len(input_me.shape) == 4:
+            axes.imshow(input_me[0].permute(1,2,0).numpy())
+        else :
+            axes.imshow(input_me[0].numpy(), cmap='gray', vmin=0., vmax=1.)
         
         plt.subplots_adjust(wspace = 0.1)
 
@@ -538,17 +496,7 @@ def cut():
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=int("5000"), debug=True)
     
-'''   
-# test the PIL
-# Define the path to your image file
-image_path = os.path.join(os.getcwd(), 'ILSVRC2012_val_00004095.JPEG')
 
-# Open the image file using PIL
-image = Image.open(image_path)
-
-# Show the image using PIL's built-in image viewer
-image.show()
-'''  
     
      
     
