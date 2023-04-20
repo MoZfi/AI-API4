@@ -512,7 +512,7 @@ def cut():
         #image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
         fig, axes = plt.subplots(1,len(image_final),figsize=(3*len(image_final),3))
 
-        for i, ax in enumerate(axes):
+        for i, ax in enumerate(axes.flatten()):
             if len(image_final.shape) == 4:
                 ax.imshow(image_final[i].permute(1,2,0).numpy())
             else :
