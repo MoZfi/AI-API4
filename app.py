@@ -10,7 +10,7 @@ import base64
 
 
 '''AI library'''
-# first you shuld install : pip install gco-wrapper
+# first you shuld install : gco-wrapper
 import os
 import numpy as np
 import torch
@@ -249,9 +249,7 @@ def puzzle():
                             transport=transport, t_eps=t_eps, t_size=t_size,
                             device='cpu')
 
-        #print_fig(output[0] * std_torch + mean_torch) ---> niazi nist chin function print_fig tooye khode function move shode
-        #ratio= output[1].detach().cpu().numpy()
-        #print(ratio)
+       
         
         print(output[0].shape)
         
@@ -268,7 +266,7 @@ def puzzle():
         #plt.imshow(np_array.transpose(1, 2, 0))
         #plt.show()
 
-
+         
         # Convert the NumPy array to a Python dictionary
         tensor_dict = {'message': 'Image processed successfully!', 'lable':shuffled_targets.tolist() ,'data': np_array.tolist()}
         # Convert the Python dictionary to JSON
@@ -357,7 +355,6 @@ def cut():
         # Get the uploaded images from the request
         img1 = imgs[0]
         img2 = imgs[1]
-        #print(img1)
         #return jsonify(rn) # just for check the print in the terminal
 
         # Open the images using Pillow
@@ -374,17 +371,6 @@ def cut():
         #return img1_array.tobytes(), img2_array.tobytes()
 
 
-
-        ############### Model ###############
-        resnet = models.resnet18(pretrained=True)
-        mean = torch.tensor([0.485, 0.456, 0.406])
-        std = torch.tensor([0.229, 0.224, 0.225])
-        mean_torch = mean.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
-        std_torch = std.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
-
-        resnet.eval()
-        criterion = nn.CrossEntropyLoss()
-
         ### Data: imagenet with transform ####
         img_exists = True
 
@@ -393,7 +379,7 @@ def cut():
             test_transform = transforms.Compose([
                 transforms.Resize(256),
                 transforms.CenterCrop(254),
-                transforms.ToTensor(),# akaharesh beyad Tensor koni dar pytorch va garna image khali nemigire
+                transforms.ToTensor(),
                 transforms.Normalize(mean=mean, std=std)])
         else:
             pass
@@ -409,7 +395,6 @@ def cut():
         targets = torch.tensor([int(lable1), int(lable2)])
 
 
-        #print_fig((input_sp * std_torch + mean_torch)[:sample_num])
 
         """### Cut Mix"""
 
@@ -417,15 +402,11 @@ def cut():
         data=input_sp
         _, _, height, width = data.shape
         print(data.size(0))
-        #indices = torch.randperm(data.size(0))
-        #print(indices)
         indices=[1,0]
         shuffled_data = data[indices]
         shuffled_targets =[]
         sorted_indexes = torch.argsort(targets, descending=True)
-        #print(sorted_indexes)
         shuffled_targets = torch.index_select(targets, index=sorted_indexes,dim=0,)
-        #print(shuffled_targets[0])
 
         lam = np.random.beta(alpha, alpha)
 
@@ -445,10 +426,10 @@ def cut():
         shuffled_targets1= lam * targets[0] + targets[1]* (1 - lam)
         targets1 = (targets,shuffled_targets,shuffled_targets1, lam)
 
-        #print_fig((data * std_torch + mean_torch)[:sample_num])
         print(targets1)
         print(data[0].shape)
         
+        ########## 1- create outout as an array
         # Convert the tensor to a NumPy array
         input_me = data [:2]
         np_array = input_me.numpy()
@@ -464,10 +445,11 @@ def cut():
         #return jsonify(tensor_json)
 
 
-        # plot the image
+        ########### 2- plot the outout image
+        
         # create GUI for the output image using Matplotlib
-        image_final= (data * std_torch + mean_torch)[:sample_num]# in 4 dim dare :tensor of size [1, 3, 224, 224]
-        #image_final = torch.squeeze(image_final, 0) # tensor of size [3, 224, 224]
+        image_final= (data * std_torch + mean_torch)[:sample_num]# tensor of size [2, 3, 224, 224]
+      
         fig, axes = plt.subplots(1,len(image_final),figsize=(3*len(image_final),3))
 
         # axes is a single Axes object
