@@ -184,7 +184,7 @@ def puzzle():
                                 transport=transport, t_eps=0.8, t_size=16,
                                 device='cpu')
 
-            #print_fig(output[0] * std_torch + mean_torch)
+           
 
         ###Beta Sweep###
         indices = [1,0]
@@ -205,7 +205,7 @@ def puzzle():
                                 transport=transport, t_eps=0.8, t_size=16,
                                 device='cpu')
 
-            #print_fig(output[0] * std_torch + mean_torch)
+           
 
         ### Gamma Sweep####
         indices = [1,0]
@@ -226,7 +226,7 @@ def puzzle():
                                 transport=transport, t_eps=0.8, t_size=16,
                                 device='cpu')
 
-            #print_fig(output[0] * std_torch + mean_torch)
+            
 
         ###Transport ###
         indices = [1,0]
