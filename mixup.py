@@ -116,7 +116,7 @@ def mixup_process(out,
 
     return out, target_reweighted
 
-############# beyne cutmix and  PuzzelMix moshtarake
+############# 
 def get_lambda(alpha=1.0, alpha2=None):
     '''Return lambda'''
     if alpha > 0.:
@@ -128,7 +128,7 @@ def get_lambda(alpha=1.0, alpha2=None):
         lam = 1.
     return lam
 
-############# faghat male PuzzelMix ke graph darim
+############# 
 def graphcut_multi(unary1, unary2, pw_x, pw_y, alpha, beta, eta, n_labels=2, eps=1e-8):
     '''alpha-beta swap algorithm'''
     block_num = unary1.shape[0]
@@ -166,7 +166,7 @@ def graphcut_multi(unary1, unary2, pw_x, pw_y, alpha, beta, eta, n_labels=2, eps
 
     return mask
 
-############# faghat male PuzzelMix ke graph darim
+############# 
 def neigh_penalty(input1, input2, k):
     '''data local smoothness term'''
     pw_x = input1[:, :, :-1, :] - input2[:, :, 1:, :]
@@ -180,7 +180,7 @@ def neigh_penalty(input1, input2, k):
 
     return pw_x, pw_y
 
-############# faghat male Cutmix ke box darim na graph##################################
+##############
 def mixup_box(input1, input2, alpha=0.5, device='cuda'):
     '''CutMix'''
     batch_size, _, height, width = input1.shape
@@ -203,7 +203,7 @@ def mixup_box(input1, input2, alpha=0.5, device='cuda'):
 
     return input1, ratio
 
-############# faghat male PuzzelMix--> zaminke be jay box ke male cutmix ma graph darim
+############# 
 def mixup_graph(input1,
                 grad1,
                 indices,
@@ -336,7 +336,7 @@ def mixup_graph(input1,
 
     return mask * input1 + (1 - mask) * input2, ratio
 
-############# faghat male PuzzelMix
+############# 
 def mask_transport(mask, grad_pool, eps=0.01):
     '''optimal transport plan'''
     batch_size = mask.shape[0]
@@ -363,7 +363,7 @@ def mask_transport(mask, grad_pool, eps=0.01):
 
     return plan_win
 
-############# faghat male PuzzelMix
+############# 
 def transport_image(img, plan, batch_size, block_num, block_size):
     '''apply transport plan to images'''
     input_patch = img.reshape([batch_size, 3, block_num, block_size,
