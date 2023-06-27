@@ -21,4 +21,5 @@ The necessary libraries are listed below:
   ![image](https://github.com/MoZfi/AI-API4/assets/90579402/6ff86b07-a751-4ca2-833b-12ce69ee3863)
 
   ## Puzzlemix
-  ![image](https://github.com/MoZfi/AI-API4/assets/90579402/ac788808-9020-4475-aeff-ca8cdc46f4c0)
+  ![image](https://github.com/MoZfi/AI-API4/assets/90579402/2ff8ee93-9536-482f-85b3-ac860b466e96)
+
