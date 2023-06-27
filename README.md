@@ -17,8 +17,8 @@ The necessary libraries are listed below:
   ![ILSVRC2012_val_00025969](https://github.com/MoZfi/AI-API4/assets/90579402/5ff0148a-9b6b-441e-9aed-49c9f3437fb8)
   ![ILSVRC2012_val_00000318](https://github.com/MoZfi/AI-API4/assets/90579402/32a441fa-b918-40c7-a26b-578e83861132)
 
-  ##1- CutMix
+  ## Cutmix
   ![image](https://github.com/MoZfi/AI-API4/assets/90579402/6ff86b07-a751-4ca2-833b-12ce69ee3863)
 
-  ##2- PuzzleMix
+  ## Puzzlemix
   ![image](https://github.com/MoZfi/AI-API4/assets/90579402/ac788808-9020-4475-aeff-ca8cdc46f4c0)
